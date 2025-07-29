@@ -19,3 +19,21 @@ func main() {
 		fmt.Println("i =", 100/i)
 	}
 }
+
+/*
+Requisitos - Serviço B (responsável pela orquestração):
+
+    O sistema deve receber um CEP válido de 8 digitos
+    O sistema deve realizar a pesquisa do CEP e encontrar o nome da localização, a partir disso, deverá retornar as temperaturas e formata-lás em: Celsius, Fahrenheit, Kelvin juntamente com o nome da localização.
+    O sistema deve responder adequadamente nos seguintes cenários:
+        Em caso de sucesso:
+            Código HTTP: 200
+            Response Body: { "city: "São Paulo", "temp_C": 28.5, "temp_F": 28.5, "temp_K": 28.5 }
+        Em caso de falha, caso o CEP não seja válido (com formato correto):
+            Código HTTP: 422
+            Mensagem: invalid zipcode
+        ​​​Em caso de falha, caso o CEP não seja encontrado:
+            Código HTTP: 404
+            Mensagem: can not find zipcode
+
+*/

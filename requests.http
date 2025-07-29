@@ -1,0 +1,23 @@
+### CEP Válido
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "cep": "29902555"
+}
+
+### CEP Inválido
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "cep": "12345"
+}
+
+### CEP Inválido não numérico
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "cep": "abcd1234"
+}

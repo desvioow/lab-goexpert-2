@@ -1,21 +1,53 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
+	"github.com/go-chi/chi/v5"
+	"net/http"
+	"regexp"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
+type CepDTO struct {
+	Cep string `json:"cep"`
+}
 
 func main() {
-	//TIP <p>Press <shortcut actionId="ShowIntentionActions"/> when your caret is at the underlined text
-	// to see how GoLand suggests fixing the warning.</p><p>Alternatively, if available, click the lightbulb to view possible fixes.</p>
-	s := "gopher"
-	fmt.Printf("Hello and welcome A, %s!\n", s)
+	r := chi.NewRouter()
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello World"))
+	})
+	r.Post("/", cepHandler)
 
-	for i := 1; i <= 5; i++ {
-		//TIP <p>To start your debugging session, right-click your code in the editor and select the Debug option.</p> <p>We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-		// for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.</p>
-		fmt.Println("i =", 100/i)
-	}
+	http.ListenAndServe(":8080", r)
 }
+
+func cepHandler(w http.ResponseWriter, r *http.Request) {
+
+	var dto CepDTO
+	err := json.NewDecoder(r.Body).Decode(&dto)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("invalid json"))
+		return
+	}
+
+	regex := regexp.MustCompile(`^\d{8}$`)
+
+	if regex.MatchString(dto.Cep) == false {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		w.Write([]byte("invalid zipcode"))
+		return
+	}
+
+}
+
+/*
+Requisitos - Serviço A (responsável pelo input):
+
+O sistema deve receber um input de 8 dígitos via POST, através do schema:  { "cep": "29902555" }
+O sistema deve validar se o input é valido (contem 8 dígitos) e é uma STRING
+Caso seja válido, será encaminhado para o Serviço B via HTTP
+Caso não seja válido, deve retornar:
+Código HTTP: 422
+Mensagem: invalid zipcode
+*/
