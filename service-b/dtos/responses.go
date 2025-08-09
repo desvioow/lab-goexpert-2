@@ -1,4 +1,4 @@
-package models
+package dtos
 
 type TemperatureResponse struct {
 	TempC string `json:"temp_C"`

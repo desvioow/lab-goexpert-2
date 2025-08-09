@@ -1,14 +1,23 @@
-### Buscar CEP válido
-GET http://localhost:8080/69402289
+### CEP Válido
+POST http://localhost:8081
 Content-Type: application/json
 
-### Buscar CEP inválido
-GET http://localhost:8080/1234567890
+{
+  "cep": "29902555"
+}
 
-### Buscar CEP  válido mas inexistente
-GET http://localhost:8080/08556111
+### CEP Inválido
+POST http://localhost:8081
 Content-Type: application/json
 
-### Buscar CEP válido mas cidade(Poá) não considerada válida na API da weatherapi.com
-GET http://localhost:8080/08556450
+{
+  "cep": "12345"
+}
+
+### CEP Inválido não numérico
+POST http://localhost:8081
 Content-Type: application/json
+
+{
+  "cep": "abcd1234"
+}

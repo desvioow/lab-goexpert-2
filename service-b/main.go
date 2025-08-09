@@ -3,33 +3,43 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/v5"
 	"lab-goexpert-2/service-b/clients"
+	"lab-goexpert-2/service-b/dtos"
 	"net/http"
 	"regexp"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
 	r := chi.NewRouter()
-	r.Get("/{cep}", cepHandler)
+	r.Post("/", cepHandler)
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World"))
+		w.Write([]byte("Hello World B"))
 	})
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8081", r)
 }
 
 func cepHandler(w http.ResponseWriter, r *http.Request) {
-	cep := chi.URLParam(r, "cep")
+
+	var dto dtos.CepDTO
+	err := json.NewDecoder(r.Body).Decode(&dto)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("invalid json"))
+		return
+	}
+
 	regex := regexp.MustCompile(`^\d{8}$`)
 
-	if regex.MatchString(cep) == false {
+	if regex.MatchString(dto.Cep) == false {
 		w.WriteHeader(http.StatusUnprocessableEntity)
 		w.Write([]byte("invalid zipcode"))
 		return
 	}
 
-	viaCepResponse, err := clients.FetchCep(cep)
+	viaCepResponse, err := clients.FetchCep(dto.Cep)
 	if err != nil {
 		fmt.Println("Error:", err)
 		w.WriteHeader(http.StatusInternalServerError)

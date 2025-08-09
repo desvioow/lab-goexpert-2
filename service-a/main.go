@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
-	"github.com/go-chi/chi/v5"
+	"io"
 	"net/http"
 	"regexp"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type CepDTO struct {
@@ -14,7 +17,7 @@ type CepDTO struct {
 func main() {
 	r := chi.NewRouter()
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello World"))
+		w.Write([]byte("Hello World A"))
 	})
 	r.Post("/", cepHandler)
 
@@ -39,6 +42,32 @@ func cepHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	jsonData, err := json.Marshal(dto)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("error serializing data"))
+		return
+	}
+
+	serviceBRequestBody := bytes.NewBuffer(jsonData)
+
+	// Send POST request
+	serviceBResponse, err := http.Post("http://localhost:8081", "application/json", serviceBRequestBody)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("error connecting to service B"))
+		return
+	}
+	defer serviceBResponse.Body.Close()
+
+	responseBody, err := io.ReadAll(serviceBResponse.Body)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(serviceBResponse.StatusCode)
+	w.Write(responseBody)
 }
 
 /*
