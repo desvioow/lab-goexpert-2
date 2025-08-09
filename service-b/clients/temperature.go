@@ -12,6 +12,7 @@ func GetTemperatureFromWeatherApiResponse(weatherApiResponse dtos.WeatherApiResp
 	tempK := tempC + 273
 
 	return dtos.TemperatureResponse{
+		City:  weatherApiResponse.Location.Name,
 		TempC: fmt.Sprintf("%.1f", tempC),
 		TempF: fmt.Sprintf("%.1f", tempF),
 		TempK: fmt.Sprintf("%.1f", tempK),

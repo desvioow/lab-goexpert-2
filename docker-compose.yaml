@@ -11,8 +11,6 @@ services:
       - app-network
     depends_on:
       - service-b
-    environment:
-      - SERVICE_B_URL=http://service-b:8081
 
   service-b:
     build:

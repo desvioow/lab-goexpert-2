@@ -66,9 +66,10 @@ func cepHandler(w http.ResponseWriter, r *http.Request) {
 	temperature, err := clients.GetTemperatureFromWeatherApiResponse(weatherApiResponse)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
-	json.NewEncoder(w).Encode(temperature)
 	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(temperature)
 	return
 
 }

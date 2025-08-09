@@ -52,7 +52,7 @@ func cepHandler(w http.ResponseWriter, r *http.Request) {
 	serviceBRequestBody := bytes.NewBuffer(jsonData)
 
 	// Send POST request
-	serviceBResponse, err := http.Post("http://localhost:8081", "application/json", serviceBRequestBody)
+	serviceBResponse, err := http.Post("http://service-b:8081", "application/json", serviceBRequestBody)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("error connecting to service B"))
