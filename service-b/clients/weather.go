@@ -9,7 +9,7 @@ import (
 )
 
 func FetchWeather(cityName string) (dtos.WeatherApiResponse, error) {
-	const weatherApiKey = "4d0046deef4e4342bd9192050251307"
+	const weatherApiKey = "cebbb1afb0a94a419b4192813252709"
 	const baseUrl = "http://api.weatherapi.com/v1"
 
 	url := fmt.Sprintf("%s/current.json?key=%s&q=%s&aqi=no",
