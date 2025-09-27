@@ -127,3 +127,5 @@ curl -X POST http://localhost:8080 \
 7. **Service-B** retorna dados consolidados para **Service-A**
 8. **Service-A** repassa resposta para o **Cliente**
 
+<img width="1298" height="547" alt="image" src="https://github.com/user-attachments/assets/d478e4a9-392c-4b9b-b027-c79d09147e56" />
+
